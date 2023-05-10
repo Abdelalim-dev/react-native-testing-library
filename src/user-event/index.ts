@@ -1,6 +1,8 @@
 import { ReactTestInstance } from 'react-test-renderer';
 import { setup } from './setup';
 
+export { UserEventConfig } from './setup';
+
 export const userEvent = {
   setup,
 
