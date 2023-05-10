@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Text } from 'react-native';
 import render from '../../../render';
-import { dispatchHostEvent, dispatchOwnHostEvent } from '../events';
+import { dispatchHostEvent, dispatchOwnHostEvent } from '../dispatch-event';
 import { EventBuilder } from '../../event-builder';
 
 const TOUCH_EVENT = EventBuilder.Common.touch();
@@ -40,6 +40,18 @@ describe('dispatchHostEvent', () => {
     expect(onPress).toHaveBeenCalledTimes(1);
     expect(onPressParent).not.toHaveBeenCalled();
   });
+
+  it('does NOT throw if no handler found', () => {
+    const screen = render(
+      <Text>
+        <Text testID="text" />
+      </Text>
+    );
+
+    expect(() =>
+      dispatchHostEvent(screen.getByTestId('text'), 'press', TOUCH_EVENT)
+    ).not.toThrow();
+  });
 });
 
 describe('dispatchOwnHostEvent', () => {
@@ -61,5 +73,17 @@ describe('dispatchOwnHostEvent', () => {
 
     dispatchOwnHostEvent(screen.getByTestId('text'), 'press', TOUCH_EVENT);
     expect(onPressParent).not.toHaveBeenCalled();
+  });
+
+  it('does NOT throw if no handler found', () => {
+    const screen = render(
+      <Text>
+        <Text testID="text" />
+      </Text>
+    );
+
+    expect(() =>
+      dispatchOwnHostEvent(screen.getByTestId('text'), 'press', TOUCH_EVENT)
+    ).not.toThrow();
   });
 });
