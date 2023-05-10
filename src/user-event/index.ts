@@ -7,6 +7,6 @@ export const userEvent = {
 
   // Direct access for User Event v13 compatibility
   press: (element: ReactTestInstance) => setup().press(element),
-  type: (element: ReactTestInstance, text: string, options: TypeOptions) =>
+  type: (element: ReactTestInstance, text: string, options?: TypeOptions) =>
     setup().type(element, text, options),
 };

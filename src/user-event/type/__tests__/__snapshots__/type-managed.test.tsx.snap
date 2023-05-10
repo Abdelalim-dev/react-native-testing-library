@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`userEvent.type on managed TextInput: input: "Wow" 1`] = `
+exports[`type() for managed TextInput supports basic case: input: "Wow" 1`] = `
 [
   {
     "name": "pressIn",
@@ -13,7 +13,7 @@ exports[`userEvent.type on managed TextInput: input: "Wow" 1`] = `
         "pageX": 0,
         "pageY": 0,
         "target": 0,
-        "timestamp": 100100100100,
+        "timestamp": 0,
         "touches": [],
       },
     },
@@ -37,7 +37,7 @@ exports[`userEvent.type on managed TextInput: input: "Wow" 1`] = `
         "pageX": 0,
         "pageY": 0,
         "target": 0,
-        "timestamp": 100100100100,
+        "timestamp": 0,
         "touches": [],
       },
     },
@@ -161,7 +161,7 @@ exports[`userEvent.type on managed TextInput: input: "Wow" 1`] = `
 ]
 `;
 
-exports[`userEvent.type on rejecting TextInput: input: "ABC", value: "XXX" 1`] = `
+exports[`type() for managed TextInput supports rejecting TextInput: input: "ABC", value: "XXX" 1`] = `
 [
   {
     "name": "pressIn",
@@ -174,7 +174,7 @@ exports[`userEvent.type on rejecting TextInput: input: "ABC", value: "XXX" 1`] =
         "pageX": 0,
         "pageY": 0,
         "target": 0,
-        "timestamp": 100100100100,
+        "timestamp": 0,
         "touches": [],
       },
     },
@@ -198,7 +198,7 @@ exports[`userEvent.type on rejecting TextInput: input: "ABC", value: "XXX" 1`] =
         "pageX": 0,
         "pageY": 0,
         "target": 0,
-        "timestamp": 100100100100,
+        "timestamp": 0,
         "touches": [],
       },
     },

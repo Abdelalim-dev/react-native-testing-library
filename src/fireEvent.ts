@@ -155,35 +155,4 @@ fireEvent.changeText = (element: ReactTestInstance, ...data: unknown[]) =>
 fireEvent.scroll = (element: ReactTestInstance, ...data: unknown[]) =>
   fireEvent(element, 'scroll', ...data);
 
-export function dispatchOwnEvent(
-  element: ReactTestInstance,
-  eventName: string,
-  event: unknown
-) {
-  const handler = getOwnEventHandler(element, eventName);
-  if (!handler) {
-    return;
-  }
-
-  let returnValue;
-  act(() => {
-    returnValue = handler(event);
-  });
-
-  return returnValue;
-}
-
 export default fireEvent;
-
-function getOwnEventHandler(
-  element: ReactTestInstance,
-  eventName: string
-): EventHandler | null {
-  const touchResponder = isTouchResponder(element) ? element : undefined;
-  const handler = getEventHandler(element, eventName);
-  if (handler && isEventEnabled(element, eventName, touchResponder)) {
-    return handler;
-  }
-
-  return null;
-}
