@@ -4,7 +4,7 @@ import { EventBuilder } from '../event-builder';
 import { ErrorWithStack } from '../../helpers/errors';
 import { UserEventInstance } from '../setup';
 import {
-  dispatchHostEvent,
+  dispatchOwnHostEvent,
   wait,
   getTextRange,
   getTextContentSize,
@@ -34,14 +34,14 @@ export async function type(
 
   if (options?.skipPress !== true) {
     await wait(this.config);
-    dispatchHostEvent(element, 'pressIn', EventBuilder.Common.touch());
+    dispatchOwnHostEvent(element, 'pressIn', EventBuilder.Common.touch());
   }
 
   await wait(this.config);
-  dispatchHostEvent(element, 'focus', EventBuilder.Common.focus());
+  dispatchOwnHostEvent(element, 'focus', EventBuilder.Common.focus());
 
   if (options?.skipPress !== true) {
-    dispatchHostEvent(element, 'pressOut', EventBuilder.Common.touch());
+    dispatchOwnHostEvent(element, 'pressOut', EventBuilder.Common.touch());
   }
 
   let currentText = element.props.value ?? element.props.defaultValue ?? '';
@@ -57,7 +57,7 @@ export async function type(
 
   if (options?.submitEditing === true) {
     await wait(this.config);
-    dispatchHostEvent(
+    dispatchOwnHostEvent(
       element,
       'submitEditing',
       EventBuilder.TextInput.submitEditing(finalText)
@@ -65,12 +65,12 @@ export async function type(
   }
 
   await wait(this.config);
-  dispatchHostEvent(
+  dispatchOwnHostEvent(
     element,
     'endEditing',
     EventBuilder.TextInput.endEditing(finalText)
   );
-  dispatchHostEvent(element, 'blur', EventBuilder.Common.blur());
+  dispatchOwnHostEvent(element, 'blur', EventBuilder.Common.blur());
 }
 
 async function emitTypingEvents(
@@ -81,26 +81,30 @@ async function emitTypingEvents(
 ) {
   const isMultiline = element.props.multiline === true;
 
-  dispatchHostEvent(element, 'keyPress', EventBuilder.TextInput.keyPress(key));
+  dispatchOwnHostEvent(
+    element,
+    'keyPress',
+    EventBuilder.TextInput.keyPress(key)
+  );
 
   if (isMultiline) {
-    dispatchHostEvent(
+    dispatchOwnHostEvent(
       element,
       'textInput',
       EventBuilder.TextInput.textInput(currentText, previousText)
     );
   }
 
-  dispatchHostEvent(
+  dispatchOwnHostEvent(
     element,
     'change',
     EventBuilder.TextInput.change(currentText)
   );
 
-  dispatchHostEvent(element, 'changeText', currentText);
+  dispatchOwnHostEvent(element, 'changeText', currentText);
 
   const selectionRange = getTextRange(currentText);
-  dispatchHostEvent(
+  dispatchOwnHostEvent(
     element,
     'selectionChange',
     EventBuilder.TextInput.selectionChange(selectionRange)
@@ -108,7 +112,7 @@ async function emitTypingEvents(
 
   if (isMultiline) {
     const contentSize = getTextContentSize(currentText);
-    dispatchHostEvent(
+    dispatchOwnHostEvent(
       element,
       'contentSizeChange',
       EventBuilder.TextInput.contentSizeChange(contentSize)
