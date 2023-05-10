@@ -3,6 +3,7 @@ import { View, TextInput, TextInputProps } from 'react-native';
 import { createEventLogger } from '../../../test-utils/events';
 import { render } from '../../..';
 import { userEvent } from '../..';
+import { UserEventInstance } from '../../setup';
 
 beforeEach(() => {
   jest.useRealTimers();

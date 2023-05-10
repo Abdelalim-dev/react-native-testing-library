@@ -8,6 +8,7 @@ title: User Event
 - [`userEvent.setup`](#usereventsetup)
   - [Options](#options)
 - [`type()`](#type)
+  - [Options:](#options-1)
   - [Sequence of events](#sequence-of-events)
 
 
@@ -44,9 +45,24 @@ type(
 ): Promise<void>
 ```
 
+Example
+```ts
+await user.type(textInput, "Hello world!");
+```
+
 This helper simulates user focusing on `TextInput` element, typing `text` one character at a time, and leaving the element.
 
+This function supports only host `TextInput` elements. Passing other element type will result in throwing error.
+
+### Options:
+ - `skipPress` - if true, `pressIn` and `pressOut` events will not be triggered.
+ - `submitEditing` - if true, `submitEditing` event will be triggered after typing the text.
+
 ### Sequence of events
+
+The sequence of events depends on `multiline` prop, as well as passed options.
+
+Events will not be emitted if `editable` prop is set to `false`.
 
 Entering the element:
 - `pressIn` (optional)

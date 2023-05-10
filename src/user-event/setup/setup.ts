@@ -45,7 +45,7 @@ const defaultOptions: Required<UserEventSetupOptions> = {
  * Creates a new instance of user event instance with the given options.
  *
  * @param options
- * @returns
+ * @returns UserEvent instance
  */
 export function setup(options?: UserEventSetupOptions) {
   const config = createConfig(options);
@@ -53,6 +53,12 @@ export function setup(options?: UserEventSetupOptions) {
   return instance;
 }
 
+/**
+ * Options affecting all user event interactions.
+ *
+ * @param delay between some subsequent inputs like typing a series of characters
+ * @param advanceTimers function to be called to advance fake timers
+ */
 export interface UserEventConfig {
   delay: number;
   advanceTimers: (delay: number) => Promise<void> | void;
@@ -65,9 +71,34 @@ function createConfig(options?: UserEventSetupOptions): UserEventConfig {
   };
 }
 
+/**
+ * UserEvent instance used to invoke user interaction functions.
+ */
 export interface UserEventInstance {
   config: UserEventConfig;
+
   press: (element: ReactTestInstance) => Promise<void>;
+
+  /**
+   * Simulate user pressing on given `TextInput` element and typing given text.
+   *
+   * This method will trigger the events for each character of the text:
+   * `keyPress`, `change`, `changeText`, `endEditing`, etc.
+   *
+   * It will also trigger events connected with entering and leaving the text
+   * input.
+   *
+   * The exact events sent depend on the props of TextInput (`editable`,
+   * `multiline`, value, defaultValue, etc) and passed options.
+   *
+   * @param element TextInput element to type on
+   * @param text Text to type
+   * @param options Options affecting typing behavior:
+   *  - `skipPress` - if true, `pressIn` and `pressOut` events will not be
+   *   triggered.
+   * - `submitEditing` - if true, `submitEditing` event will be triggered after
+   * typing the text.
+   */
   type: (
     element: ReactTestInstance,
     text: string,
