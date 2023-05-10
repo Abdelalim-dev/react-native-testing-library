@@ -289,7 +289,7 @@ exports[`type() supports basic case: input: "abc" 1`] = `
 ]
 `;
 
-exports[`type() supports defaultValue: input: "ab", defaultValue: "xxx" 1`] = `
+exports[`type() supports defaultValue prop: input: "ab", defaultValue: "xxx" 1`] = `
 [
   {
     "name": "pressIn",

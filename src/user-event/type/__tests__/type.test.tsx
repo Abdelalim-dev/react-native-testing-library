@@ -98,7 +98,7 @@ describe('type()', () => {
     ]);
   });
 
-  it('supports defaultValue', async () => {
+  it('supports defaultValue prop', async () => {
     const { events, ...queries } = renderTextInputWithToolkit({
       defaultValue: 'xxx',
     });
@@ -124,6 +124,18 @@ describe('type()', () => {
     ]);
 
     expect(events).toMatchSnapshot('input: "ab", defaultValue: "xxx"');
+  });
+
+  it('does respect editable prop', async () => {
+    const { events, ...queries } = renderTextInputWithToolkit({
+      editable: false,
+    });
+
+    const user = userEvent.setup();
+    await user.type(queries.getByTestId('input'), 'ab');
+
+    const eventNames = events.map((e) => e.name);
+    expect(eventNames).toEqual([]);
   });
 
   it('supports backspace', async () => {
