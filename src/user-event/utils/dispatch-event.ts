@@ -28,7 +28,7 @@ export function dispatchHostEvent(
 }
 
 /**
- * Dispatch event functio only to given element. Does not look event handler
+ * Dispatch event function only to given element. Does not look event handler
  * in the ancestors.
  *
  * @param element element trigger event on

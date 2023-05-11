@@ -1,5 +1,5 @@
 import { ReactTestInstance } from 'react-test-renderer';
-import { getConfig } from '../../config';
+import { getHostComponentNames } from '../../helpers/host-component-names';
 import { EventBuilder } from '../event-builder';
 import { ErrorWithStack } from '../../helpers/errors';
 import { UserEventInstance } from '../setup';
@@ -23,7 +23,7 @@ export async function type(
   text: string,
   options?: TypeOptions
 ): Promise<void> {
-  if (element.type !== getConfig().hostComponentNames?.textInput) {
+  if (element.type !== getHostComponentNames().textInput) {
     throw new ErrorWithStack(
       `type() works only with "TextInput" elements. Passed element has type "${element.type}".`,
       type
@@ -32,7 +32,7 @@ export async function type(
 
   const keys = parseKeys(text);
 
-  if (options?.skipPress !== true) {
+  if (!options?.skipPress) {
     await wait(this.config);
     dispatchOwnHostEvent(element, 'pressIn', EventBuilder.Common.touch());
   }
@@ -40,7 +40,7 @@ export async function type(
   await wait(this.config);
   dispatchOwnHostEvent(element, 'focus', EventBuilder.Common.focus());
 
-  if (options?.skipPress !== true) {
+  if (!options?.skipPress) {
     dispatchOwnHostEvent(element, 'pressOut', EventBuilder.Common.touch());
   }
 
@@ -55,7 +55,7 @@ export async function type(
 
   const finalText = element.props.value ?? currentText;
 
-  if (options?.submitEditing === true) {
+  if (options?.submitEditing) {
     await wait(this.config);
     dispatchOwnHostEvent(
       element,
