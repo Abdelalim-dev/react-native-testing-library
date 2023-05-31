@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { StyleSheet, SafeAreaView, TextInput } from 'react-native';
-import { buildEventLogger } from '../utils/helpers';
+import { buildEventLogger, logEvent } from '../utils/helpers';
 
 const handlePressIn = buildEventLogger('pressIn');
 const handlePressOut = buildEventLogger('pressOut');
@@ -8,13 +8,16 @@ const handleFocus = buildEventLogger('focus');
 const handleBlur = buildEventLogger('blur');
 const handleChange = buildEventLogger('change');
 const handleSubmitEditing = buildEventLogger('submitEditing');
+const handleKeyPress = buildEventLogger('keyPress');
+const handleTextInput = buildEventLogger('textInput');
+const handleSelectionChange = buildEventLogger('selectionChange');
 
 export function TextInputEvents() {
   const [value, setValue] = React.useState('');
 
   const handleChangeText = (value: string) => {
     setValue(value);
-    console.log(`Event: changeText`, value);
+    logEvent('changeText', value);
   };
 
   return (
@@ -30,6 +33,9 @@ export function TextInputEvents() {
         onBlur={handleBlur}
         onChange={handleChange}
         onSubmitEditing={handleSubmitEditing}
+        onSelectionChange={handleSelectionChange}
+        onKeyPress={handleKeyPress}
+        onTextInput={handleTextInput}
       />
     </SafeAreaView>
   );
