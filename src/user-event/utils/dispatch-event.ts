@@ -1,6 +1,7 @@
 import { ReactTestInstance } from 'react-test-renderer';
 import act from '../../act';
 import { isEventEnabled, isTouchResponder } from '../../fireEvent';
+import { flushMicroTasks } from '../../flushMicroTasks';
 import { getHostParent } from '../../helpers/component-tree';
 
 type EventHandler = (event: unknown) => void;
@@ -24,6 +25,7 @@ export function dispatchHostEvent(
 
   act(() => {
     handler(event);
+    flushMicroTasks();
   });
 }
 
@@ -47,6 +49,7 @@ export function dispatchOwnHostEvent(
 
   act(() => {
     handler(event);
+    flushMicroTasks();
   });
 }
 
