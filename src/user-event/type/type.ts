@@ -33,14 +33,13 @@ export async function type(
   const keys = parseKeys(text);
 
   if (!options?.skipPress) {
-    await wait(this.config);
     dispatchOwnHostEvent(element, 'pressIn', EventBuilder.Common.touch());
   }
 
-  await wait(this.config);
   dispatchOwnHostEvent(element, 'focus', EventBuilder.Common.focus());
 
   if (!options?.skipPress) {
+    await wait(this.config);
     dispatchOwnHostEvent(element, 'pressOut', EventBuilder.Common.touch());
   }
 
@@ -55,8 +54,9 @@ export async function type(
 
   const finalText = element.props.value ?? currentText;
 
+  await wait(this.config);
+
   if (options?.submitEditing) {
-    await wait(this.config);
     dispatchOwnHostEvent(
       element,
       'submitEditing',
@@ -64,12 +64,12 @@ export async function type(
     );
   }
 
-  await wait(this.config);
   dispatchOwnHostEvent(
     element,
     'endEditing',
     EventBuilder.TextInput.endEditing(finalText)
   );
+
   dispatchOwnHostEvent(element, 'blur', EventBuilder.Common.blur());
 }
 
