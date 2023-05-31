@@ -17,7 +17,7 @@ export function parseKeys(text: string) {
   return result;
 }
 
-function getNextToken(text: string) {
+function getNextToken(text: string): [string, string] {
   // Detect `{{` => escaped `{`
   if (text[0] === '{' && text[1] === '{') {
     return ['{', text.slice(2)];
