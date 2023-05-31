@@ -1,13 +1,9 @@
 import { ReactTestInstance } from 'react-test-renderer';
 import act from './act';
 import { getHostParent, isHostElement } from './helpers/component-tree';
-import { getHostComponentNames } from './helpers/host-component-names';
+import { isHostTextInput } from './helpers/host-component-names';
 
 type EventHandler = (...args: unknown[]) => unknown;
-
-const isHostTextInput = (element?: ReactTestInstance) => {
-  return element?.type === getHostComponentNames().textInput;
-};
 
 export function isTouchResponder(element: ReactTestInstance) {
   if (!isHostElement(element)) {

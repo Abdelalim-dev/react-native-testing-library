@@ -1,8 +1,8 @@
 import { ReactTestInstance } from 'react-test-renderer';
 import act from '../../act';
-import { isEventEnabled, isTouchResponder } from '../../fireEvent';
 import { flushMicroTasks } from '../../flushMicroTasks';
 import { getHostParent } from '../../helpers/component-tree';
+import { isHostTextInput } from '../../helpers/host-component-names';
 
 type EventHandler = (event: unknown) => void;
 
@@ -42,7 +42,7 @@ export function dispatchOwnHostEvent(
   eventName: string,
   event: unknown
 ) {
-  const handler = getEnabledEventHandler(element, eventName);
+  const handler = getEventHandler(element, eventName);
   if (!handler) {
     return;
   }
@@ -53,31 +53,21 @@ export function dispatchOwnHostEvent(
   });
 }
 
+/**
+ * Looks up for event handler in the element and its ancestors.
+ */
 function findEnabledEventHandler(
   element: ReactTestInstance,
   eventName: string
 ): EventHandler | null {
-  const handler = getEnabledEventHandler(element, eventName);
-  if (handler) {
-    return handler;
-  }
+  let current: ReactTestInstance | null = element;
+  while (current != null) {
+    const handler = getEventHandler(current, eventName);
+    if (handler) {
+      return handler;
+    }
 
-  const parent = getHostParent(element);
-  if (!parent) {
-    return null;
-  }
-
-  return findEnabledEventHandler(parent, eventName);
-}
-
-function getEnabledEventHandler(
-  element: ReactTestInstance,
-  eventName: string
-): EventHandler | null {
-  const touchResponder = isTouchResponder(element) ? element : undefined;
-  const handler = getEventHandler(element, eventName);
-  if (handler && isEventEnabled(element, eventName, touchResponder)) {
-    return handler;
+    current = getHostParent(current);
   }
 
   return null;
@@ -85,13 +75,51 @@ function getEnabledEventHandler(
 
 function getEventHandler(element: ReactTestInstance, eventName: string) {
   const eventHandlerName = getEventHandlerName(eventName);
-  if (typeof element.props[eventHandlerName] === 'function') {
-    return element.props[eventHandlerName];
+  if (typeof element.props[eventHandlerName] !== 'function') {
+    return null;
   }
 
-  return undefined;
+  if (!isEventEnabled(element)) {
+    return null;
+  }
+
+  return element.props[eventHandlerName];
 }
 
 function getEventHandlerName(eventName: string) {
   return `on${eventName.charAt(0).toUpperCase()}${eventName.slice(1)}`;
+}
+
+function isEventEnabled(element: ReactTestInstance) {
+  if (isHostTextInput(element)) {
+    return element?.props.editable !== false;
+  }
+
+  if (!isPointerEventEnabled(element)) {
+    return false;
+  }
+
+  const touchStart = element?.props.onStartShouldSetResponder?.();
+  return touchStart !== false;
+}
+
+export function isPointerEventEnabled(
+  element: ReactTestInstance,
+  isParent?: boolean
+): boolean {
+  const pointerEvents = element.props.pointerEvents;
+  if (pointerEvents === 'none') {
+    return false;
+  }
+
+  if (isParent ? pointerEvents === 'box-only' : pointerEvents === 'box-none') {
+    return false;
+  }
+
+  const parent = getHostParent(element);
+  if (!parent) {
+    return true;
+  }
+
+  return isPointerEventEnabled(parent, true);
 }
