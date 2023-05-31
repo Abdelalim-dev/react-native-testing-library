@@ -1,6 +1,5 @@
 import { ReactTestInstance } from 'react-test-renderer';
 import act from '../../act';
-import { flushMicroTasks } from '../../flushMicroTasks';
 import { getHostParent } from '../../helpers/component-tree';
 import { isHostTextInput } from '../../helpers/host-component-names';
 
@@ -25,7 +24,6 @@ export function dispatchHostEvent(
 
   act(() => {
     handler(event);
-    flushMicroTasks();
   });
 }
 
@@ -49,7 +47,6 @@ export function dispatchOwnHostEvent(
 
   act(() => {
     handler(event);
-    flushMicroTasks();
   });
 }
 
